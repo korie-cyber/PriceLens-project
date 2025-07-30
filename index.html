@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="./assets/logo-icon-flex.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PriceLens</title>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="./assets/logo-flexisaf.jpg" alt="logo" />
+      </div>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav id="nav" class="nav">
+        <ul>
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#predict">Predict</a></li>
+          <li><a href="./about.html">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-overlay" id="navOverlay"></div>
+    </header>
+
+    <section id="home" class="home">
+      <div>
+        <h1>Know the Price.<br />Make the Move.</h1>
+
+        <p>
+          Smart price estimates for Lagos and <br />Abuja. Just tell us the
+          property details, <br />we'll predict the price.
+        </p>
+        <a href="#predict"
+          ><button class="move-prediction-btn">Start Prediction</button></a
+        >
+      </div>
+    </section>
+    <section id="predict" class="predict">
+      <h2>Predict House Price</h2>
+      <p>
+        Enter property information to generate a <br />
+        price estimate
+      </p>
+      <form id="estimateForm">
+        <div class="form-group">
+          <label for="state">State</label>
+          <select name="state" id="state">
+            <option value="Abuja">Abuja</option>
+            <option value="Lagos">Lagos</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="town">Town</label>
+          <input type="text" id="town" name="town" required />
+        </div>
+
+        <div class="form-group">
+          <label for="bathroom">Bathroom</label>
+          <input type="number" id="bathroom" name="bathroom" required />
+        </div>
+
+        <div class="form-group">
+          <label for="bedroom">Bedroom</label>
+          <input type="number" id="bedroom" name="bedroom" required />
+        </div>
+
+        <div class="form-group">
+          <label for="toilet">Toilet</label>
+          <input type="number" id="toilet" name="toilet" required />
+        </div>
+
+        <div class="form-group">
+          <label for="parkingSpace">Parking Space</label>
+          <select name="parkingSpace" id="parkingSpace">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="usage">Property Usage</label>
+          <select name="usage" id="usage">
+            <option value="Rent">Rent</option>
+            <option value="Sale">Sale</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Property Type</label>
+          <select name="type" id="type">
+            <option value="Detached Duplex">Detached Duplex</option>
+            <option value="Semi Detached Duplex">Semi Detached Duplex</option>
+            <option value="Terraced Duplexes">Terraced Duplexes</option>
+            <option value="Detached Bungalow">Detached Bungalow</option>
+            <option value="Block of Flats">Block of Flats</option>
+            <option value="Terraced Bungalow">Terraced Bungalow</option>
+            <option value="Semi Detached Bungalow">
+              Semi Detached Bungalow
+            </option>
+          </select>
+        </div>
+
+        <button type="submit">Get Estimate</button>
+      </form>
+      <div id="resultModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <span class="close" id="closeModal">&times;</span>
+          <h3 id="modalType"></h3>
+          <p class="modal-strong"><strong id="modalAddress"></strong></p>
+          <p class="modal-strong modal-price">
+            <strong id="modalPrice"></strong>
+          </p>
+          <p class="modal-description" id="modalDescription"></p>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <span><a href="./about.html" class="footer-link">About</a></span>
+      <p>©2025. All right reserved</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
