@@ -71,11 +71,7 @@ form.addEventListener("submit", function (e) {
     type: data.type,
     address: `${data.town}, ${data.state}`,
     price: Math.floor(Math.random() * 100000000) + 5000000, // Simulated price
-<<<<<<< HEAD
-    description: `A ${data.bedroom}-bedroom, ${data.bathroom}-bathroom ${data.type} located in ${data.town}, ${data.state}, suitable for ${data.usage.toLowerCase()}. Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae dicta nemo aspernatur voluptates, officiis est maxime odit quas autem consectetur dolor.`,
-=======
     description: `A ${data.bedroom}-bedroom, ${data.bathroom}-bathroom ${data.type} located in ${data.town}, ${data.state}, with ${data.parkingSpace} parking space(s), suitable for ${data.usage.toLowerCase()}. Lorem ipsum dolor sit amet consectetur adipisicing elit...`,
->>>>>>> 83431b5 (Added frontend implementation)
   };
 
   modalType.textContent = result.type;
