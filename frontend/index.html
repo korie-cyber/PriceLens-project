@@ -85,11 +85,14 @@
         </div>
 
         <div class="form-group">
-          <label for="parkingSpace">Parking Space</label>
-          <select name="parkingSpace" id="parkingSpace">
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          <label for="parkingSpace">Number of Parking Space</label>
+          <input
+            type="number"
+            id="parkingSpace"
+            name="parkingSpace"
+            required
+            min="0"
+          />
         </div>
 
         <div class="form-group">
