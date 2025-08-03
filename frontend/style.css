@@ -24,13 +24,15 @@ header {
   height: 11vh;
 }
 
-header div {
-  width: 100x;
-  height: 40px;
+.logo {
+  min-width: 100px;
+  max-width: 350px;
+  height: 65%;
 
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -125,9 +127,9 @@ header nav ul {
   background-size: cover;
   background-position: center bottom;
   width: 100%;
-  height: 110vh;
+  height: 100vh;
   color: #ffffff;
-  margin-top: -2rem;
+  margin-top: 1rem;
   padding-top: 6rem;
   padding-left: 4.5rem;
   display: flex;
@@ -141,14 +143,14 @@ header nav ul {
     height: fit-content;
 
     h1 {
-      font-size: 3.5rem;
-      line-height: 4.5rem;
+      font-size: 3.2rem;
+      line-height: 4rem;
     }
 
     p {
       margin-top: 2rem;
-      font-size: 1.6rem;
-      line-height: 2.3rem;
+      font-size: 1.4rem;
+      line-height: 2.1rem;
       font-weight: 400;
     }
   }
@@ -157,7 +159,7 @@ header nav ul {
 .move-prediction-btn {
   background-color: #dc2323;
   font-weight: 700;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #ffffff;
   padding: 1rem 2rem;
   border: none;
@@ -409,14 +411,21 @@ footer {
 /* Styles for screens smaller than 768px (e.g., mobile) */
 @media only screen and (max-width: 767px) {
   header {
-    height: 10vh;
+    height: 9vh;
+  }
+
+  .logo {
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .home {
-    margin-top: -2rem;
+    margin-top: 1rem;
     padding: 1rem;
     display: flex;
-    height: 107vh;
+    height: 100vh;
     align-items: center;
     justify-content: end;
     padding-bottom: 9rem;
@@ -636,14 +645,20 @@ footer {
 }
 
 /* Styles for screens between 768px and 1024px (e.g., tablet) */
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
   header {
-    height: 10vh;
+    height: 9vh;
+  }
+
+  .logo {
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .home {
-    height: 105vh;
-    margin-top: -2rem;
+    height: 100vh;
     padding-bottom: 7rem;
 
     div {
@@ -651,14 +666,14 @@ footer {
       height: fit-content;
 
       h1 {
-        font-size: 3.5rem;
-        line-height: 4.5rem;
+        font-size: 3.8rem;
+        line-height: 4.8rem;
       }
 
       p {
         margin-top: 2rem;
-        font-size: 1.8rem;
-        line-height: 2.3rem;
+        font-size: 2rem;
+        line-height: 2.5rem;
         font-weight: 400;
         margin-bottom: 3rem;
       }
@@ -668,7 +683,7 @@ footer {
   button {
     padding: 10px 15px;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin-top: 20px;
     background-color: #dc2323;
     color: white;
@@ -744,5 +759,3 @@ footer {
     width: 90%;
   }
 }
-
-/* // tftdftatfstyfatftsafsaffstaftfst */

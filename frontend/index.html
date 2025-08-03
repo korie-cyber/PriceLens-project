@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="./assets/logo-icon-flex.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,7 +11,6 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PriceLens</title>
   </head>
   <body>
@@ -85,11 +85,14 @@
         </div>
 
         <div class="form-group">
-          <label for="parkingSpace">Parking Space</label>
-          <select name="parkingSpace" id="parkingSpace">
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          <label for="parkingSpace">Number of Parking Space</label>
+          <input
+            type="number"
+            id="parkingSpace"
+            name="parkingSpace"
+            required
+            min="0"
+          />
         </div>
 
         <div class="form-group">
