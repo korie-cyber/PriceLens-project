@@ -15,8 +15,11 @@
   </head>
   <body>
     <header>
-      <div class="logo">
-        <img src="./assets/logo-flexisaf.jpg" alt="logo" />
+      <div class="price-lens">
+        <div class="logo">
+          <img src="./assets/flexi-logo.jpg" alt="logo" />
+        </div>
+        <h1>Price<span class="lens">Lens</span></h1>
       </div>
 
       <div class="hamburger" id="hamburger">
@@ -58,7 +61,7 @@
       <form id="estimateForm">
         <div class="form-group">
           <label for="state">State</label>
-          <select name="state" id="state">
+          <select name="state" id="state" required>
             <option value="Abuja">Abuja</option>
             <option value="Lagos">Lagos</option>
           </select>
@@ -66,7 +69,9 @@
 
         <div class="form-group">
           <label for="town">Town</label>
-          <input type="text" id="town" name="town" required />
+          <select name="town" id="town" required>
+            <option value="">Select a town</option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -120,6 +125,7 @@
 
         <button type="submit">Get Estimate</button>
       </form>
+
       <div id="resultModal" class="modal" style="display: none">
         <div class="modal-content">
           <span class="close" id="closeModal">&times;</span>
@@ -132,6 +138,7 @@
         </div>
       </div>
     </section>
+
     <footer>
       <span><a href="./about.html" class="footer-link">About</a></span>
       <p>©2025. All right reserved</p>
