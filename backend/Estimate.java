@@ -1,4 +1,5 @@
 // Estimate.java
+// Data model for incoming request from frontend
 public class Estimate {
     public String state;
     public String town;
