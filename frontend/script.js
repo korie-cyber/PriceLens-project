@@ -168,7 +168,7 @@ form.addEventListener("submit", function (e) {
   }
 
   // Real Backend Integration
-  fetch("https://pricelens-project-4.onrender.com", {
+  fetch("https://pricelens-project-4.onrender.com/estimate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
