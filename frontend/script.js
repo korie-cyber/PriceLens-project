@@ -14,6 +14,9 @@ const modalDescription = document.getElementById("modalDescription");
 const stateSelect = document.getElementById("state");
 const townSelect = document.getElementById("town");
 
+// Get the submit button (assuming it has an id of "submitBtn" or is a button with type="submit")
+const submitButton = form.querySelector('button[type="submit"]') || form.querySelector('#submitBtn');
+
 // Town options
 const towns = {
   Lagos: [
@@ -120,6 +123,99 @@ Object.keys(towns).forEach((state) => {
   towns[state].sort((a, b) => a.localeCompare(b));
 });
 
+// Function to create and inject loading spinner styles
+function injectLoadingStyles() {
+  if (!document.getElementById('loadingStyles')) {
+    const style = document.createElement('style');
+    style.id = 'loadingStyles';
+    style.textContent = `
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .btn-loading {
+        pointer-events: none;
+        opacity: 0.7;
+        position: relative;
+      }
+      
+      .btn-loading::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      .pulse-loading {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: .5;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
+// Function to show loading state
+function showLoading() {
+  if (submitButton) {
+    // Store original button text
+    submitButton.dataset.originalText = submitButton.textContent;
+    
+    // Create spinner element
+    const spinner = document.createElement('span');
+    spinner.className = 'loading-spinner';
+    
+    // Update button content and state
+    submitButton.innerHTML = '';
+    submitButton.appendChild(spinner);
+    submitButton.appendChild(document.createTextNode('Getting Estimate...'));
+    submitButton.disabled = true;
+    submitButton.classList.add('btn-loading', 'pulse-loading');
+    
+    // Prevent form resubmission
+    submitButton.style.cursor = 'not-allowed';
+  }
+}
+
+// Function to hide loading state
+function hideLoading() {
+  if (submitButton) {
+    // Restore original button state
+    const originalText = submitButton.dataset.originalText || 'Get Estimate';
+    submitButton.textContent = originalText;
+    submitButton.disabled = false;
+    submitButton.classList.remove('btn-loading', 'pulse-loading');
+    submitButton.style.cursor = 'pointer';
+  }
+}
+
 // Update town dropdown based on selected state
 function updateTownOptions() {
   const selectedState = stateSelect.value;
@@ -167,6 +263,9 @@ form.addEventListener("submit", function (e) {
     return;
   }
 
+  // Show loading state
+  showLoading();
+
   // Real Backend Integration
   fetch("https://pricelens-project-4.onrender.com/estimate", {
     method: "POST",
@@ -191,6 +290,10 @@ form.addEventListener("submit", function (e) {
       alert(
         "Failed to get estimate. Please make sure your backend is running.",
       );
+    })
+    .finally(() => {
+      // Always hide loading state when request completes
+      hideLoading();
     });
 });
 
@@ -206,4 +309,9 @@ window.onclick = function (event) {
 };
 
 stateSelect.addEventListener("change", updateTownOptions);
-document.addEventListener("DOMContentLoaded", updateTownOptions);
+
+// Initialize everything when DOM loads
+document.addEventListener("DOMContentLoaded", function() {
+  injectLoadingStyles();
+  updateTownOptions();
+});
