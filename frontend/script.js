@@ -148,21 +148,6 @@ function injectLoadingStyles() {
       .btn-loading {
         pointer-events: none;
         opacity: 0.7;
-        position: relative;
-      }
-      
-      .btn-loading::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 20px;
-        height: 20px;
-        border: 2px solid transparent;
-        border-top: 2px solid currentColor;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
       }
       
       .pulse-loading {
