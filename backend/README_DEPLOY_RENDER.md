@@ -1,54 +1,60 @@
-# PriceLens Backend — Render Deployment Guide (Java)
+# PriceLens Backend — Render Deployment Guide (Python)
 
-## Files included
-- `Estimate.java` — request model
-- `EstimateHandler.java` — HTTP handler, CORS, JSON in/out
-- `EstimateServer.java` — starts server and binds to `PORT` (Render) or 8080 (local)
-- `manifest.txt` — JAR manifest (Main-Class and classpath for gson)
-- `Procfile` — starts the app with `java -jar PriceLensBackend.jar`
-- `build.sh` / `build.bat` — helper scripts to build locally or on Render
+The Java backend was replaced with a small Python Flask app to simplify deployment on Render.
 
-## Requirements
-- `gson-2.8.9.jar` must exist in the same folder (commit this jar in your repo).
-- Java 11+
+Files in this folder:
 
-## Local build & run (Windows)
-```bat
-build.bat
-java -jar PriceLensBackend.jar
+- `app.py` — Flask app exposing POST `/estimate` (reimplements the prior Java logic).
+- `requirements.txt` — Python dependencies: Flask, gunicorn, flask-cors.
+- `Procfile` — start command: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 1`.
+
+Deploy on Render (step-by-step):
+
+1. Push the repository to your Git host (GitHub/GitLab/Bitbucket).
+2. In Render, create a new Web Service and connect the repository.
+3. Set the Root Directory to `backend`.
+4. Build Command: leave empty (Render will install requirements automatically) or set to:
+   pip install -r requirements.txt
+5. Start Command: Render usually uses the `Procfile` automatically; otherwise set:
+   gunicorn app:app --bind 0.0.0.0:$PORT --workers 1
+6. Health check path: `/estimate`.
+
+# PriceLens Backend — Render Deployment Guide (Python)
+
+The Java backend was replaced with a small Python Flask app to simplify deployment on Render.
+
+Files in this folder:
+
+- `app.py` — Flask app exposing POST `/estimate` (reimplements the prior Java logic).
+- `requirements.txt` — Python dependencies: Flask, gunicorn, flask-cors, joblib, pandas.
+- `Procfile` — start command: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 1`.
+
+Deploy on Render (step-by-step):
+
+1. Push the repository to your Git host (GitHub/GitLab/Bitbucket).
+2. In Render, create a new Web Service and connect the repository.
+3. Set the Root Directory to `backend`.
+4. Build Command: leave empty (Render will install requirements automatically) or set to:
+   pip install -r requirements.txt
+5. Start Command: Render usually uses the `Procfile` automatically; otherwise set:
+   gunicorn app:app --bind 0.0.0.0:$PORT --workers 1
+6. Health check path: `/health`.
+
+Local testing:
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python app.py
 ```
 
-## Local build & run (Linux/Mac)
-```bash
-chmod +x build.sh
-./build.sh
-java -jar PriceLensBackend.jar
+Test the endpoint:
+
+```powershell
+$body = @{ bedroom = "3"; bathroom = "2"; toilet = "2"; parkingSpace = "1"; town = "Lagos"; state = "Lagos"; type = "Apartment"; usage = "Residential" } | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:8080/estimate" -Method Post -Body $body -ContentType "application/json"
 ```
 
-## Render Settings
-- **Build Command:**
-  ```bash
-  ./build.sh
-  ```
-  (or paste these two lines:)
-  ```bash
-  javac -cp gson-2.8.9.jar:. *.java -d out
-  jar cfm PriceLensBackend.jar manifest.txt -C out .
-  ```
-- **Start Command:**
-  ```
-  java -jar PriceLensBackend.jar
-  ```
-
-When deployed, Render will give you a URL like:
-`https://<your-service>.onrender.com/estimate`
-
-## Frontend
-In your `script.js`:
-```js
-fetch("https://<your-service>.onrender.com/estimate", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data),
-})
-```
+If you want the Java version instead, restore the following files and ensure Java 11+ is available: `*.java`, `manifest.txt`, `gson-2.8.9.jar`, and `PriceLensBackend.jar`.
