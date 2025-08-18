@@ -1,7 +1,7 @@
 services:
   - type: web
     name: pricelens-backend
-    repo: https://github.com/korie-cyber/PriceLens-project   # <- replace this
+    repo: https://github.com/korie-cyber/PriceLens-project 
     branch: main
     rootDir: backend
     env: python
