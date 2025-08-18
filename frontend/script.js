@@ -168,7 +168,7 @@ form.addEventListener("submit", function (e) {
   }
 
   // Real Backend Integration
-  fetch("https://pricelens-project.onrender.com", {
+  fetch("https://pricelens-project-4.onrender.com", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -176,12 +176,12 @@ form.addEventListener("submit", function (e) {
     body: JSON.stringify(data),
   })
     .then((response) => {
-      if (!response.ok) throw new Error("Backend Error");
+      if (!response.ok) return response.text().then(t => { throw new Error(`${response.status} ${t}`) });
       return response.json();
     })
     .then((result) => {
       modalType.textContent = result.type;
-      modalAddress.textContent = `${result.town}, ${result.state}`;
+      modalAddress.textContent = `${result.town || data.town}, ${result.state || data.state}`;
       modalPrice.textContent = `₦${result.price.toLocaleString()}`;
       modalDescription.textContent = result.description;
       modal.style.display = "flex";
