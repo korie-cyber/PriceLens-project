@@ -1,21 +1,10 @@
-const hamburger = document.getElementById("hamburger");
-const nav = document.getElementById("nav");
-const overlay = document.getElementById("navOverlay");
-
-const form = document.getElementById("estimateForm");
-const modal = document.getElementById("resultModal");
-const closeModal = document.getElementById("closeModal");
-
-const modalType = document.getElementById("modalType");
-const modalAddress = document.getElementById("modalAddress");
-const modalPrice = document.getElementById("modalPrice");
-const modalDescription = document.getElementById("modalDescription");
-
-const stateSelect = document.getElementById("state");
-const townSelect = document.getElementById("town");
-
-// Get the submit button (assuming it has an id of "submitBtn" or is a button with type="submit")
-const submitButton = form.querySelector('button[type="submit"]') || form.querySelector('#submitBtn');
+// Elements will be queried after DOMContentLoaded so pages that don't include
+// the form/modal (for example `about.html`) won't cause runtime errors.
+let hamburger, nav, overlay;
+let form, modal, closeModal;
+let modalType, modalAddress, modalPrice, modalDescription;
+let stateSelect, townSelect;
+let submitButton = null;
 
 // Town options
 const towns = {
@@ -170,21 +159,14 @@ function injectLoadingStyles() {
 // Function to show loading state
 function showLoading() {
   if (submitButton) {
-    // Store original button text
     submitButton.dataset.originalText = submitButton.textContent;
-    
-    // Create spinner element
     const spinner = document.createElement('span');
     spinner.className = 'loading-spinner';
-    
-    // Update button content and state
     submitButton.innerHTML = '';
     submitButton.appendChild(spinner);
     submitButton.appendChild(document.createTextNode('Getting Estimate...'));
     submitButton.disabled = true;
     submitButton.classList.add('btn-loading', 'pulse-loading');
-    
-    // Prevent form resubmission
     submitButton.style.cursor = 'not-allowed';
   }
 }
@@ -192,7 +174,6 @@ function showLoading() {
 // Function to hide loading state
 function hideLoading() {
   if (submitButton) {
-    // Restore original button state
     const originalText = submitButton.dataset.originalText || 'Get Estimate';
     submitButton.textContent = originalText;
     submitButton.disabled = false;
@@ -203,11 +184,10 @@ function hideLoading() {
 
 // Update town dropdown based on selected state
 function updateTownOptions() {
+  if (!stateSelect || !townSelect) return;
   const selectedState = stateSelect.value;
   const options = towns[selectedState] || [];
-
   townSelect.innerHTML = '<option value="">Select a town</option>';
-
   options.forEach((town) => {
     const option = document.createElement("option");
     option.value = town;
@@ -217,19 +197,61 @@ function updateTownOptions() {
 }
 
 // Hamburger menu toggle
-hamburger.addEventListener("click", () => {
-  hamburger.classList.toggle("open");
-  nav.classList.toggle("open");
-  overlay.classList.toggle("active");
-});
+document.addEventListener("DOMContentLoaded", function() {
+  injectLoadingStyles();
 
-overlay.addEventListener("click", () => {
-  hamburger.classList.remove("open");
-  nav.classList.remove("open");
-  overlay.classList.remove("active");
-});
+  // Query elements now that DOM is loaded
+  hamburger = document.getElementById("hamburger");
+  nav = document.getElementById("nav");
+  overlay = document.getElementById("navOverlay");
 
-form.addEventListener("submit", function (e) {
+  form = document.getElementById("estimateForm");
+  modal = document.getElementById("resultModal");
+  closeModal = document.getElementById("closeModal");
+
+  modalType = document.getElementById("modalType");
+  modalAddress = document.getElementById("modalAddress");
+  modalPrice = document.getElementById("modalPrice");
+  modalDescription = document.getElementById("modalDescription");
+
+  stateSelect = document.getElementById("state");
+  townSelect = document.getElementById("town");
+
+  if (form) {
+    submitButton = form.querySelector('button[type="submit"]') || form.querySelector('#submitBtn');
+  }
+
+  // Hamburger menu toggle (only if it exists)
+  if (hamburger && nav && overlay) {
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("open");
+      nav.classList.toggle("open");
+      overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      hamburger.classList.remove("open");
+      nav.classList.remove("open");
+      overlay.classList.remove("active");
+    });
+    
+    // Auto-close the menu when any nav link is clicked (works for anchors and cross-page links)
+    try {
+      const navLinks = nav.querySelectorAll('a');
+      navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          nav.classList.remove('open');
+          overlay.classList.remove('active');
+        });
+      });
+    } catch (e) {
+      // defensive: if nav doesn't support querySelectorAll for some reason, skip
+    }
+  }
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
   e.preventDefault();
 
   const data = {
@@ -243,16 +265,16 @@ form.addEventListener("submit", function (e) {
     type: form.type.value,
   };
 
-  if (!towns[data.state].includes(data.town)) {
-    alert("Invalid town selected for the chosen state.");
-    return;
-  }
+      if (!towns[data.state].includes(data.town)) {
+        alert("Invalid town selected for the chosen state.");
+        return;
+      }
 
-  // Show loading state
-  showLoading();
+      // Show loading state
+      showLoading();
 
-  // Real Backend Integration
-  fetch("https://pricelens-project-4.onrender.com/estimate", {
+      // Real Backend Integration
+      fetch("https://pricelens-project-4.onrender.com/estimate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -276,10 +298,32 @@ form.addEventListener("submit", function (e) {
         "Failed to get estimate. Please make sure your backend is running.",
       );
     })
-    .finally(() => {
-      // Always hide loading state when request completes
-      hideLoading();
+      .finally(() => {
+        // Always hide loading state when request completes
+        hideLoading();
+      });
     });
+  }
+
+  // Modal close (guarded)
+  if (closeModal && modal) {
+    closeModal.onclick = function () {
+      modal.style.display = "none";
+    };
+  }
+
+  window.onclick = function (event) {
+    if (modal && event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  if (stateSelect) {
+    stateSelect.addEventListener("change", updateTownOptions);
+  }
+
+  // initialize towns dropdown if present
+  updateTownOptions();
 });
 
 // Modal close
