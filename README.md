@@ -105,14 +105,14 @@ We're planning several improvements:
    cd PriceLens-project
     ```
 2. Set up your Python environment (using venv, pipenv, or conda):
-    python -m venv venv
-    source venv/bin/activate  # macOS/Linux
-    venv\Scripts\activate     # Windows
-    pip install -r requirements.txt
+    - python -m venv venv
+    - source venv/bin/activate  # macOS/Linux
+    - venv\Scripts\activate     # Windows
+    - pip install -r requirements.txt
 
 3. Run the Flask backend:
-    cd backend
-    flask run
+    - cd backend
+    - flask run
 
 4. Launch the frontend—open frontend/index.html in your browser or deploy locally (if there's a dev server script).
 
