@@ -25,6 +25,24 @@ Visit the web app and enter basic property details:
 
 Hit submit and get instant rent or sale price estimates based on historical market data.
 
+## Screenshots
+
+### Homepage
+The landing page introduces PriceLens with a simple call to action.
+![Homepage Screenshot](./screenshots/p1.png)
+
+### Prediction Form
+Users can enter property details like location, bedrooms, bathrooms, and property type to get instant price estimates.
+![Prediction Form Screenshot](./screenshots/p2.png)
+
+### Prediction Results
+Users get to see thier estmiated price from pricelens as a pop-up.
+![Estimated Price Display](./screenshots/p3.png)
+
+### About the team page
+Users get to see the persons who were responsible for the project, and what contribution they made. They can also send them mails, check their twitter account, as well as their linkedIn account. 
+![Team Responsible](./screenshots/p4.png)  
+
 ## The problem we're solving
 
 The Nigerian property market has several challenges:
@@ -47,13 +65,13 @@ PriceLens addresses these issues by providing objective, algorithm-based price e
 
 Our machine learning model achieves:
 - R-squared score of 0.79 (explains 79% of price variation)
-- Root Mean Square Error of approximately 29 million Naira
+- Root Mean Square Error of approximately 29 million Naira (equivalent to about 12% of the average price in the dataset)
 
 While these metrics indicate reasonable performance for trend analysis, actual prices may differ due to market changes since our training data.
 
 ## Dataset information
 
-We used a Nigerian real estate dataset containing property listings from 2023. The data includes properties from Lagos and Abuja with features like location, property type, size, and historical prices.
+We used a Nigerian real estate dataset containing property listings from 2023 (gotten from kaggle). The data includes properties from Lagos and Abuja with features like location, property type, size, and historical prices.
 
 **Dataset access**: [View/Download Dataset](https://drive.google.com/file/d/18V9u1efQ8nftYJbVYSLHjYU_ZB1JsOh9/view?usp=sharing) (nigeria_houses_data.csv)
 
@@ -79,15 +97,27 @@ We're planning several improvements:
 - Advanced modeling techniques for better accuracy
 - Interactive visualizations showing market trends
 
-## Getting started locally
+## How to Use
 
-Clone the repository:
-```bash
-git clone https://github.com/your-username/pricelens.git
-cd pricelens
-```
+1. Clone the repository  
+    ```bash
+   git clone https://github.com/korie-cyber/PriceLens-project.git
+   cd PriceLens-project
+    ```
+2. Set up your Python environment (using venv, pipenv, or conda):
+    python -m venv venv
+    source venv/bin/activate  # macOS/Linux
+    venv\Scripts\activate     # Windows
+    pip install -r requirements.txt
 
-Install dependencies and run the Flask backend, then open the frontend in your browser. Detailed setup instructions are in the project repository.
+3. Run the Flask backend:
+    cd backend
+    flask run
+
+4. Launch the frontend—open frontend/index.html in your browser or deploy locally (if there's a dev server script).
+
+5. Navigate to http://localhost:5000, fill in features (location, number of bedrooms/bathrooms/toilets, etc.), and view the predicted prices.
+
 
 ## Acknowledgments
 
@@ -104,6 +134,12 @@ The project showcases end-to-end development: data collection and cleaning, mach
 ## Contributing
 
 This is an open project welcoming contributions. Whether you want to improve the model, add new features, or extend coverage to more cities, we'd love your input. The codebase is structured for easy modification and extension.
+
+For collaborations: 
+    git checkout -b feature-branch
+    git commit -m "Add new feature"
+    git push origin feature-branch
+
 
 ## Disclaimer
 
