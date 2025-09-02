@@ -136,10 +136,11 @@ The project showcases end-to-end development: data collection and cleaning, mach
 This is an open project welcoming contributions. Whether you want to improve the model, add new features, or extend coverage to more cities, we'd love your input. The codebase is structured for easy modification and extension.
 
 For collaborations: 
+    ```bash
     git checkout -b feature-branch
     git commit -m "Add new feature"
     git push origin feature-branch
-
+    ```
 
 ## Disclaimer
 
