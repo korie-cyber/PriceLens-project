@@ -7,22 +7,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
-    <title>PriceLens</title>
+    <title>PriceLens — Nigerian Property Price Estimator</title>
   </head>
   <body>
     <header>
       <div class="price-lens">
         <div class="logo">
-          <img src="./assets/flexi-logo.jpg" alt="logo" />
+          <img src="./assets/flexi-logo.jpg" alt="PriceLens logo" />
         </div>
         <h1>Price<span class="lens">Lens</span></h1>
       </div>
 
-      <div class="hamburger" id="hamburger">
+      <div class="hamburger" id="hamburger" aria-label="Toggle menu">
         <span></span>
         <span></span>
         <span></span>
@@ -42,23 +46,23 @@
     <section id="home" class="home">
       <div>
         <h1>Know the Price.<br />Make the Move.</h1>
-
         <p>
-          Smart price estimates for Lagos and <br />Abuja. Just tell us the
-          property details, <br />we'll predict the price.
+          AI-powered price estimates for Lagos and Abuja.<br />
+          Enter the property details — we'll predict the price.
         </p>
-        <a href="#predict"
-          ><button class="move-prediction-btn">Start Prediction</button></a
-        >
+        <a href="#predict">
+          <button class="move-prediction-btn">
+            <i class="fas fa-search"></i> Start Prediction
+          </button>
+        </a>
       </div>
     </section>
+
     <section id="predict" class="predict">
       <h2>Predict House Price</h2>
-      <p>
-        Enter property information to generate a <br />
-        price estimate
-      </p>
-      <form id="estimateForm">
+      <p>Enter property details below to get an AI-powered price estimate.</p>
+
+      <form id="estimateForm" novalidate>
         <div class="form-group">
           <label for="state">State</label>
           <select name="state" id="state" required>
@@ -68,41 +72,67 @@
         </div>
 
         <div class="form-group">
-          <label for="town">Town</label>
+          <label for="town">Town / Area</label>
           <select name="town" id="town" required>
             <option value="">Select a town</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="bathroom">Bathroom</label>
-          <input type="number" id="bathroom" name="bathroom" required />
+          <label for="bedroom">Bedrooms</label>
+          <input
+            type="number"
+            id="bedroom"
+            name="bedroom"
+            required
+            min="1"
+            max="10"
+            placeholder="e.g. 3"
+          />
         </div>
 
         <div class="form-group">
-          <label for="bedroom">Bedroom</label>
-          <input type="number" id="bedroom" name="bedroom" required />
+          <label for="bathroom">Bathrooms</label>
+          <input
+            type="number"
+            id="bathroom"
+            name="bathroom"
+            required
+            min="1"
+            max="10"
+            placeholder="e.g. 2"
+          />
         </div>
 
         <div class="form-group">
-          <label for="toilet">Toilet</label>
-          <input type="number" id="toilet" name="toilet" required />
+          <label for="toilet">Toilets</label>
+          <input
+            type="number"
+            id="toilet"
+            name="toilet"
+            required
+            min="1"
+            max="10"
+            placeholder="e.g. 2"
+          />
         </div>
 
         <div class="form-group">
-          <label for="parkingSpace">Number of Parking Space</label>
+          <label for="parkingSpace">Parking Spaces</label>
           <input
             type="number"
             id="parkingSpace"
             name="parkingSpace"
             required
             min="0"
+            max="10"
+            placeholder="e.g. 1"
           />
         </div>
 
         <div class="form-group">
           <label for="usage">Property Usage</label>
-          <select name="usage" id="usage">
+          <select name="usage" id="usage" required>
             <option value="Rent">Rent</option>
             <option value="Sale">Sale</option>
           </select>
@@ -110,39 +140,49 @@
 
         <div class="form-group">
           <label for="type">Property Type</label>
-          <select name="type" id="type">
+          <select name="type" id="type" required>
             <option value="Detached Duplex">Detached Duplex</option>
             <option value="Semi Detached Duplex">Semi Detached Duplex</option>
             <option value="Terraced Duplexes">Terraced Duplexes</option>
             <option value="Detached Bungalow">Detached Bungalow</option>
             <option value="Block of Flats">Block of Flats</option>
             <option value="Terraced Bungalow">Terraced Bungalow</option>
-            <option value="Semi Detached Bungalow">
-              Semi Detached Bungalow
-            </option>
+            <option value="Semi Detached Bungalow">Semi Detached Bungalow</option>
           </select>
         </div>
 
-        <button type="submit">Get Estimate</button>
+        <button type="submit" id="submitBtn">Get Estimate</button>
       </form>
 
-      <div id="resultModal" class="modal" style="display: none">
+      <!-- Result Modal -->
+      <div id="resultModal" class="modal" style="display: none" role="dialog" aria-modal="true" aria-labelledby="modalType">
         <div class="modal-content">
-          <span class="close" id="closeModal">&times;</span>
-          <h3 id="modalType"></h3>
-          <p class="modal-strong"><strong id="modalAddress"></strong></p>
-          <p class="modal-strong modal-price">
-            <strong id="modalPrice"></strong>
-          </p>
-          <p class="modal-description" id="modalDescription"></p>
+          <button class="close" id="closeModal" aria-label="Close">&times;</button>
+
+          <div class="modal-header">
+            <p class="modal-label">Estimated Price</p>
+            <p class="modal-price" id="modalPrice"></p>
+            <p class="modal-range" id="modalRange"></p>
+          </div>
+
+          <div class="modal-body">
+            <p class="modal-type" id="modalType"></p>
+            <p class="modal-address" id="modalAddress">
+              <i class="fas fa-map-marker-alt" style="color:#dc2323;font-size:0.85rem;"></i>
+              <span id="modalAddressText"></span>
+            </p>
+            <p class="modal-description" id="modalDescription"></p>
+            <p class="modal-note" id="modalNote"></p>
+          </div>
         </div>
       </div>
     </section>
 
     <footer>
       <span><a href="./about.html" class="footer-link">About</a></span>
-      <p>©2025. All right reserved</p>
+      <p>&copy; 2026 PriceLens. All rights reserved.</p>
     </footer>
+
     <script src="script.js"></script>
   </body>
 </html>

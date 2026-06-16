@@ -1,12 +1,12 @@
-// Elements will be queried after DOMContentLoaded so pages that don't include
-// the form/modal (for example `about.html`) won't cause runtime errors.
+// Elements are queried after DOMContentLoaded so pages without
+// the form/modal (e.g. about.html) don't cause runtime errors.
 let hamburger, nav, overlay;
 let form, modal, closeModal;
-let modalType, modalAddress, modalPrice, modalDescription;
+let modalPrice, modalRange, modalType, modalAddressText, modalDescription, modalNote;
 let stateSelect, townSelect;
 let submitButton = null;
 
-// Town options
+// Town options per state
 const towns = {
   Lagos: [
     "Lekki",
@@ -112,77 +112,6 @@ Object.keys(towns).forEach((state) => {
   towns[state].sort((a, b) => a.localeCompare(b));
 });
 
-// Function to create and inject loading spinner styles
-function injectLoadingStyles() {
-  if (!document.getElementById('loadingStyles')) {
-    const style = document.createElement('style');
-    style.id = 'loadingStyles';
-    style.textContent = `
-      .loading-spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 2px solid #f3f3f3;
-        border-top: 2px solid #3498db;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-right: 8px;
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      .btn-loading {
-        pointer-events: none;
-        opacity: 0.7;
-      }
-      
-      .pulse-loading {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-      
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: .5;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-}
-
-// Function to show loading state
-function showLoading() {
-  if (submitButton) {
-    submitButton.dataset.originalText = submitButton.textContent;
-    const spinner = document.createElement('span');
-    spinner.className = 'loading-spinner';
-    submitButton.innerHTML = '';
-    submitButton.appendChild(spinner);
-    submitButton.appendChild(document.createTextNode('Getting Estimate...'));
-    submitButton.disabled = true;
-    submitButton.classList.add('btn-loading', 'pulse-loading');
-    submitButton.style.cursor = 'not-allowed';
-  }
-}
-
-// Function to hide loading state
-function hideLoading() {
-  if (submitButton) {
-    const originalText = submitButton.dataset.originalText || 'Get Estimate';
-    submitButton.textContent = originalText;
-    submitButton.disabled = false;
-    submitButton.classList.remove('btn-loading', 'pulse-loading');
-    submitButton.style.cursor = 'pointer';
-  }
-}
-
-// Update town dropdown based on selected state
 function updateTownOptions() {
   if (!stateSelect || !townSelect) return;
   const selectedState = stateSelect.value;
@@ -196,11 +125,40 @@ function updateTownOptions() {
   });
 }
 
-// Hamburger menu toggle
-document.addEventListener("DOMContentLoaded", function() {
-  injectLoadingStyles();
+function showLoading() {
+  if (!submitButton) return;
+  submitButton.dataset.originalText = submitButton.textContent;
+  const spinner = document.createElement("span");
+  spinner.className = "loading-spinner";
+  submitButton.innerHTML = "";
+  submitButton.appendChild(spinner);
+  submitButton.appendChild(document.createTextNode("Getting Estimate…"));
+  submitButton.disabled = true;
+  submitButton.classList.add("btn-loading");
+}
 
-  // Query elements now that DOM is loaded
+function hideLoading() {
+  if (!submitButton) return;
+  submitButton.textContent = submitButton.dataset.originalText || "Get Estimate";
+  submitButton.disabled = false;
+  submitButton.classList.remove("btn-loading");
+}
+
+function formatNaira(amount) {
+  return "₦" + Math.round(amount).toLocaleString("en-NG");
+}
+
+function openModal() {
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeModalFn() {
+  modal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
   hamburger = document.getElementById("hamburger");
   nav = document.getElementById("nav");
   overlay = document.getElementById("navOverlay");
@@ -209,19 +167,21 @@ document.addEventListener("DOMContentLoaded", function() {
   modal = document.getElementById("resultModal");
   closeModal = document.getElementById("closeModal");
 
-  modalType = document.getElementById("modalType");
-  modalAddress = document.getElementById("modalAddress");
   modalPrice = document.getElementById("modalPrice");
+  modalRange = document.getElementById("modalRange");
+  modalType = document.getElementById("modalType");
+  modalAddressText = document.getElementById("modalAddressText");
   modalDescription = document.getElementById("modalDescription");
+  modalNote = document.getElementById("modalNote");
 
   stateSelect = document.getElementById("state");
   townSelect = document.getElementById("town");
 
   if (form) {
-    submitButton = form.querySelector('button[type="submit"]') || form.querySelector('#submitBtn');
+    submitButton = document.getElementById("submitBtn") || form.querySelector('button[type="submit"]');
   }
 
-  // Hamburger menu toggle (only if it exists)
+  // Hamburger menu
   if (hamburger && nav && overlay) {
     hamburger.addEventListener("click", () => {
       hamburger.classList.toggle("open");
@@ -234,113 +194,110 @@ document.addEventListener("DOMContentLoaded", function() {
       nav.classList.remove("open");
       overlay.classList.remove("active");
     });
-    
-    // Auto-close the menu when any nav link is clicked (works for anchors and cross-page links)
-    try {
-      const navLinks = nav.querySelectorAll('a');
-      navLinks.forEach((link) => {
-        link.addEventListener('click', () => {
-          hamburger.classList.remove('open');
-          nav.classList.remove('open');
-          overlay.classList.remove('active');
-        });
-      });
-    } catch (e) {
-      // defensive: if nav doesn't support querySelectorAll for some reason, skip
-    }
-  }
 
-  if (form) {
-    form.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const data = {
-    state: form.state.value,
-    town: form.town.value,
-    bathroom: form.bathroom.value,
-    bedroom: form.bedroom.value,
-    toilet: form.toilet.value,
-    parkingSpace: form.parkingSpace.value,
-    usage: form.usage.value,
-    type: form.type.value,
-  };
-
-      if (!towns[data.state].includes(data.town)) {
-        alert("Invalid town selected for the chosen state.");
-        return;
-      }
-
-      // Show loading state
-      showLoading();
-
-      // Real Backend Integration
-      fetch("https://pricelens-project-4.onrender.com/estimate", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (!response.ok) return response.text().then(t => { throw new Error(`${response.status} ${t}`) });
-      return response.json();
-    })
-    .then((result) => {
-      modalType.textContent = result.type;
-      modalAddress.textContent = `${result.town || data.town}, ${result.state || data.state}`;
-      modalPrice.textContent = `₦${result.price.toLocaleString()}`;
-      modalDescription.textContent = result.description;
-      modal.style.display = "flex";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert(
-        "Failed to get estimate. Please make sure your backend is running.",
-      );
-    })
-      .finally(() => {
-        // Always hide loading state when request completes
-        hideLoading();
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("open");
+        nav.classList.remove("open");
+        overlay.classList.remove("active");
       });
     });
   }
 
-  // Modal close (guarded)
-  if (closeModal && modal) {
-    closeModal.onclick = function () {
-      modal.style.display = "none";
-    };
-  }
-
-  window.onclick = function (event) {
-    if (modal && event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-
+  // Town dropdown
   if (stateSelect) {
     stateSelect.addEventListener("change", updateTownOptions);
   }
-
-  // initialize towns dropdown if present
   updateTownOptions();
-});
 
-// Modal close
-closeModal.onclick = function () {
-  modal.style.display = "none";
-};
+  // Form submit
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+      const bedroom = parseInt(form.bedroom.value, 10);
+      const bathroom = parseInt(form.bathroom.value, 10);
+      const toilet = parseInt(form.toilet.value, 10);
+      const parkingSpace = parseInt(form.parkingSpace.value, 10);
+
+      if (bedroom < 1 || bedroom > 10) {
+        alert("Please enter a number of bedrooms between 1 and 10.");
+        return;
+      }
+      if (bathroom < 1 || bathroom > 10) {
+        alert("Please enter a number of bathrooms between 1 and 10.");
+        return;
+      }
+      if (toilet < 1 || toilet > 10) {
+        alert("Please enter a number of toilets between 1 and 10.");
+        return;
+      }
+      if (parkingSpace < 0 || parkingSpace > 10) {
+        alert("Please enter parking spaces between 0 and 10.");
+        return;
+      }
+
+      const data = {
+        state: form.state.value,
+        town: form.town.value,
+        bathroom,
+        bedroom,
+        toilet,
+        parkingSpace,
+        usage: form.usage.value,
+        type: form.type.value,
+      };
+
+      if (!data.town || !towns[data.state]?.includes(data.town)) {
+        alert("Please select a valid town for the chosen state.");
+        return;
+      }
+
+      showLoading();
+
+      fetch("https://pricelens-project-4.onrender.com/estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) return response.text().then((t) => { throw new Error(`${response.status} ${t}`); });
+          return response.json();
+        })
+        .then((result) => {
+          modalPrice.textContent = formatNaira(result.price);
+
+          if (result.price_low && result.price_high) {
+            modalRange.textContent = `Range: ${formatNaira(result.price_low)} – ${formatNaira(result.price_high)}`;
+          } else {
+            modalRange.textContent = "";
+          }
+
+          modalType.textContent = result.type || data.type;
+          modalAddressText.textContent = `${result.town || data.town}, ${result.state || data.state}`;
+          modalDescription.textContent = result.description || "";
+          modalNote.textContent = result.data_note || "";
+
+          openModal();
+        })
+        .catch((error) => {
+          console.error("Estimate error:", error);
+          alert("Failed to get estimate. Please check your connection or try again later.");
+        })
+        .finally(hideLoading);
+    });
   }
-};
 
-stateSelect.addEventListener("change", updateTownOptions);
+  // Modal close
+  if (closeModal) {
+    closeModal.addEventListener("click", closeModalFn);
+  }
 
-// Initialize everything when DOM loads
-document.addEventListener("DOMContentLoaded", function() {
-  injectLoadingStyles();
-  updateTownOptions();
+  window.addEventListener("click", (e) => {
+    if (modal && e.target === modal) closeModalFn();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && modal.style.display !== "none") closeModalFn();
+  });
 });

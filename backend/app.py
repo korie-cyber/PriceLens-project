@@ -7,6 +7,11 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+# The model was trained on 2023 Nigerian real estate data. Nigeria experienced
+# significant naira inflation (~26% in 2023, ~32% in 2024, ~22% in 2025),
+# compounding to roughly 2.1x nominal price growth by mid-2026.
+INFLATION_ADJUSTMENT = 2.1
+
 # Model and metadata globals
 model = None
 metadata = None
@@ -136,9 +141,14 @@ def estimate():
             expected_columns = ['bedrooms', 'bathrooms', 'toilets', 'parking_space', 'title', 'town', 'state', 'listing_type']
             df = df.reindex(expected_columns, axis=1)
         
-        # Make prediction
-        prediction = model.predict(df)[0]
-        
+        # Make prediction and apply 2023→2026 inflation adjustment
+        raw_prediction = model.predict(df)[0]
+        prediction = raw_prediction * INFLATION_ADJUSTMENT
+
+        # ±20% range to give a realistic price band
+        price_low = round(prediction * 0.80)
+        price_high = round(prediction * 1.20)
+
         # Format address
         address = ''
         if data.get('town'):
@@ -159,10 +169,14 @@ def estimate():
             'state': nv(data.get('state')),
             'town': nv(data.get('town')),
             'address': address or 'N/A',
-            'price': round(prediction, 2),  # Round to 2 decimal places
-            'price_formatted': f"NGN {prediction:,.2f}",  # Formatted price
+            'price': round(prediction, 2),
+            'price_low': price_low,
+            'price_high': price_high,
+            'price_formatted': f"NGN {prediction:,.0f}",
+            'price_range_formatted': f"NGN {price_low:,} – NGN {price_high:,}",
             'description': description,
-            'model_used': 'Gradient Boosting Model'
+            'model_used': 'Gradient Boosting Model',
+            'data_note': 'Estimate adjusted for 2023–2026 Nigerian real estate inflation.'
         }
 
         return jsonify(resp), 200
