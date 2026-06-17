@@ -2,7 +2,8 @@
 // the form/modal (e.g. about.html) don't cause runtime errors.
 let hamburger, nav, overlay;
 let form, modal, closeModal;
-let modalPrice, modalRange, modalType, modalAddressText, modalDescription, modalNote;
+let modalPriceLabel, modalPrice, modalPriceSublabel, modalMonthly, modalRange;
+let modalType, modalAddressText, modalDescription, modalNote;
 let stateSelect, townSelect;
 let submitButton = null;
 
@@ -167,12 +168,15 @@ document.addEventListener("DOMContentLoaded", function () {
   modal = document.getElementById("resultModal");
   closeModal = document.getElementById("closeModal");
 
-  modalPrice = document.getElementById("modalPrice");
-  modalRange = document.getElementById("modalRange");
-  modalType = document.getElementById("modalType");
-  modalAddressText = document.getElementById("modalAddressText");
-  modalDescription = document.getElementById("modalDescription");
-  modalNote = document.getElementById("modalNote");
+  modalPriceLabel   = document.getElementById("modalPriceLabel");
+  modalPrice        = document.getElementById("modalPrice");
+  modalPriceSublabel = document.getElementById("modalPriceSublabel");
+  modalMonthly      = document.getElementById("modalMonthly");
+  modalRange        = document.getElementById("modalRange");
+  modalType         = document.getElementById("modalType");
+  modalAddressText  = document.getElementById("modalAddressText");
+  modalDescription  = document.getElementById("modalDescription");
+  modalNote         = document.getElementById("modalNote");
 
   stateSelect = document.getElementById("state");
   townSelect = document.getElementById("town");
@@ -265,8 +269,27 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((result) => {
+          const isRent = (result.listing_type || data.usage) === "Rent";
+
+          // Price label
+          modalPriceLabel.textContent = isRent ? "Estimated Annual Rent" : "Estimated Sale Price";
+
+          // Main price
           modalPrice.textContent = formatNaira(result.price);
 
+          // Sub-label (per annum / total)
+          modalPriceSublabel.textContent = isRent ? "per annum" : "total asking price";
+
+          // Monthly equivalent for rent only
+          if (isRent && result.monthly_equiv) {
+            modalMonthly.textContent = `≈ ${formatNaira(result.monthly_equiv)} / month`;
+            modalMonthly.style.display = "inline-block";
+          } else {
+            modalMonthly.textContent = "";
+            modalMonthly.style.display = "none";
+          }
+
+          // Price range
           if (result.price_low && result.price_high) {
             modalRange.textContent = `Range: ${formatNaira(result.price_low)} – ${formatNaira(result.price_high)}`;
           } else {

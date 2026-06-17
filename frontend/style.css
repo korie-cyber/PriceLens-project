@@ -379,6 +379,24 @@ form > button[type="submit"]:disabled {
   line-height: 1.2;
 }
 
+.modal-price-sublabel {
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 0.2rem;
+}
+
+.modal-monthly {
+  font-size: 0.88rem;
+  opacity: 0.8;
+  margin-top: 0.35rem;
+  background: rgba(255,255,255,0.1);
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+}
+
 .modal-range {
   font-size: 0.82rem;
   opacity: 0.65;
