@@ -9,21 +9,26 @@
 
 ## What is PriceLens?
 
-PriceLens is a web application that predicts house prices in Lagos and Abuja, Nigeria. Whether you're looking to rent or buy, simply input your property preferences and get an instant price estimate.
+PriceLens is a web application that estimates house prices in Lagos and Abuja, Nigeria. Whether you're looking to rent or buy, simply input your property preferences and get an instant price estimate calibrated to mid-2026 market data.
 
-The Nigerian real estate market can be unpredictable, with prices varying wildly and scams being common. PriceLens uses machine learning to provide transparent, data-driven price estimates that help both locals and diaspora citizens make informed decisions.
+The Nigerian real estate market can be unpredictable, with prices varying wildly and scams being common. PriceLens provides transparent, data-driven price estimates that help both locals and diaspora citizens make informed decisions.
 
-## How it works
+## How It Works
 
 Visit the web app and enter basic property details:
-- Location (Lagos or Abuja)
-- Specific area or town
-- Number of bedrooms
-- Number of bathrooms
-- Number of toilets
-- Property type (flat, duplex, detached house, etc.)
+- **Location** — Lagos or Abuja, with 90+ specific towns/areas
+- **Bedrooms** (1–10)
+- **Bathrooms** (1–10)
+- **Toilets** (1–10)
+- **Parking Spaces** (0–10)
+- **Property Usage** — Rent or Sale
+- **Property Type** — Block of Flats, Terraced Bungalow, Semi/Detached Bungalow, Terraced/Semi/Detached Duplex
 
-Hit submit and get instant rent or sale price estimates based on historical market data.
+Hit submit and get an instant estimate with:
+- **Rent**: Annual price (per annum) with a monthly equivalent breakdown
+- **Sale**: Total asking price for outright purchase
+- A price range (±18%) reflecting typical market variation
+- Area tier classification and data provenance note
 
 ## Screenshots
 
@@ -36,112 +41,109 @@ Users can enter property details like location, bedrooms, bathrooms, and propert
 ![Prediction Form Screenshot](./screenshots/p2.png)
 
 ### Prediction Results
-Users get to see thier estmiated price from pricelens as a pop-up.
+Users get to see their estimated price from PriceLens as a pop-up modal.
 ![Estimated Price Display](./screenshots/p3.png)
 
-### About the team page
-Users get to see the persons who were responsible for the project, and what contribution they made. They can also send them mails, check their twitter account, as well as their linkedIn account. 
-![Team Responsible](./screenshots/p4.png)  
+### About the Team
+Users get to see the people responsible for the project and what contribution they made. They can also send them emails, check their Twitter/X accounts, and their LinkedIn profiles.
+![Team Responsible](./screenshots/p4.png)
 
-## The problem we're solving
+## The Problem We're Solving
 
 The Nigerian property market has several challenges:
-- Inflated and inconsistent pricing
-- Limited transparency in price setting
+- Inflated and inconsistent pricing across different areas
+- Limited transparency in how prices are set
 - Difficulty for diaspora citizens to assess fair market rates
 - Potential for scams due to information asymmetry
 
-PriceLens addresses these issues by providing objective, algorithm-based price estimates anyone can access for free.
+PriceLens addresses these issues by providing objective, market-calibrated price estimates anyone can access for free.
 
-## Technical details
+## Technical Details
 
-**Frontend**: Built with HTML, CSS, and JavaScript for a clean, responsive interface  
-**Backend**: Python Flask API that processes requests and returns predictions  
-**Machine Learning**: Gradient Boosting Regressor model trained on 2023 property data  
-**Data Processing**: Pandas and NumPy for data cleaning and feature engineering  
-**Deployment**: Frontend on Vercel, backend on Render for reliable hosting  
+**Frontend**: HTML, CSS, and vanilla JavaScript — responsive, no framework dependencies  
+**Backend**: Python Flask API with Flask-CORS  
+**Pricing Engine**: 2026 market-calibrated rule-based system with 6 area tiers, separate rent/sale base-price tables, and property-type multipliers  
+**Deployment**: Frontend on Vercel, backend on Render
 
-## Model performance
+## Pricing Engine
 
-Our machine learning model achieves:
-- R-squared score of 0.79 (explains 79% of price variation)
-- Root Mean Square Error of approximately 29 million Naira (equivalent to about 12% of the average price in the dataset)
+PriceLens uses a market-calibrated pricing engine built from mid-2026 Nigerian real estate listing data (sources: propertypro.ng, nigeriahousingmarket.com, theafricanvestor.com).
 
-While these metrics indicate reasonable performance for trend analysis, actual prices may differ due to market changes since our training data.
+### Architecture
+- **6 Area Tiers** — from ultra-premium (Ikoyi, Victoria Island, Maitama) to outer/satellite (Epe, Badagry, Gwagwalada)
+- **90+ Named Areas** — each mapped to a specific tier across Lagos and Abuja
+- **Separate Rent & Sale Tables** — independently calibrated (not derived from each other)
+- **Property-Type Multipliers** — Block of Flats (0.80×) up to Detached Duplex (1.70×)
+- **Fine-tuning** — minor adjustments for extra bathrooms and parking spaces
 
-## Dataset information
+### Verified Anchor Points
+| Scenario | PriceLens Estimate | Market Range |
+|---|---|---|
+| 3-bed flat, Yaba, Rent | ~₦400K/month | ₦380K–₦650K/month |
+| 3-bed family home, Gwarinpa, Rent | ~₦5M/year | ~₦5M/year |
+| 3-bed family home, Kubwa, Rent | ~₦1.75M/year | ~₦1.75M/year |
+| 3-bed duplex, Lekki, Sale | ~₦460M | ₦250M–₦500M |
 
-We used a Nigerian real estate dataset containing property listings from 2023 (gotten from kaggle). The data includes properties from Lagos and Abuja with features like location, property type, size, and historical prices.
+## Current Limitations
 
-**Dataset access**: [View/Download Dataset](https://drive.google.com/file/d/18V9u1efQ8nftYJbVYSLHjYU_ZB1JsOh9/view?usp=sharing) (nigeria_houses_data.csv)
+**Geographic scope**: Only covers Lagos and Abuja — other Nigerian cities are not yet supported  
+**Static data**: Calibrated to mid-2026 market data; does not update automatically with market shifts  
+**Economic factors**: Does not account for rapid inflation, policy changes, or economic events after calibration  
+**Property features**: Does not consider property age, exact square footage, amenities, or neighbourhood-level variation within a tier
 
-**Data challenges we addressed:**
-- Removed duplicate listings and incomplete records
-- Standardized location names and property categories
-- Separated rental and sale transactions for accurate modeling
-- Filtered extreme outliers that could skew predictions
+## What's Next
 
-## Current limitations
-
-**Geographic scope**: Only covers Lagos and Abuja, missing other major Nigerian cities  
-**Data freshness**: Based on 2023 data, may not reflect current market conditions  
-**Economic factors**: Doesn't account for policy changes, inflation, or economic shifts  
-**Property details**: Limited features compared to what affects real-world pricing  
-
-## What's next
-
-We're planning several improvements:
-- Integration with live property APIs for real-time data
-- Expansion to other Nigerian cities like Port Harcourt and Kano
-- Additional features like property size, amenities, and neighborhood ratings
-- Advanced modeling techniques for better accuracy
-- Interactive visualizations showing market trends
+- Integration with live property listing APIs for real-time price calibration
+- Expansion to other Nigerian cities (Port Harcourt, Kano, Ibadan)
+- Additional property features (square footage, amenities, neighbourhood ratings)
+- Interactive visualizations showing market trends by area and property type
 
 ## How to Use
 
-1. Clone the repository  
-    ```bash
+1. **Clone the repository**
+   ```bash
    git clone https://github.com/korie-cyber/PriceLens-project.git
    cd PriceLens-project
-    ```
-2. Set up your Python environment (using venv, pipenv, or conda):
-    - python -m venv venv
-    - source venv/bin/activate  # macOS/Linux
-    - venv\Scripts\activate     # Windows
-    - pip install -r requirements.txt
+   ```
 
-3. Run the Flask backend:
-    - cd backend
-    - flask run
+2. **Set up your Python environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # macOS/Linux
+   venv\Scripts\activate      # Windows
+   pip install -r requirements.txt
+   ```
 
-4. Launch the frontend—open frontend/index.html in your browser or deploy locally (if there's a dev server script).
+3. **Run the Flask backend**
+   ```bash
+   cd backend
+   flask run
+   ```
 
-5. Navigate to http://localhost:5000, fill in features (location, number of bedrooms/bathrooms/toilets, etc.), and view the predicted prices.
+4. **Launch the frontend** — open `frontend/index.html` in your browser or use a local dev server.
 
+5. Fill in property details and view estimated prices.
 
 ## Acknowledgments
 
 Thanks to FlexiSAF for the opportunity to work on this project during our Data Science and Generative AI internship. Special appreciation to my team members and collaborators who contributed their skills and support throughout development.
 
-## Why we built this
+## Why We Built This
 
-PriceLens began as our final project during the Data Science and Generative AI internship training at FlexiSAf. We wanted to work on something that actually matters to people's lives, not just another theoretical exercise. The Nigerian housing market affects millions of people every day, and we saw an opportunity to use our newly learned skills to make a difference.
+PriceLens began as our final project during the Data Science and Generative AI internship training at FlexiSAF. We wanted to work on something that actually matters to people's lives, not just another theoretical exercise. The Nigerian housing market affects millions of people every day, and we saw an opportunity to use our newly learned skills to make a difference.
 
-Beyond solving a real problem, this project let us showcase everything we'd learned - data collection, machine learning, web development, and deployment. We genuinely believe that technology should make life easier and more fair, especially in areas like housing where information gaps can cost people serious money.
-
-The project showcases end-to-end development: data collection and cleaning, machine learning model training, web application development, and cloud deployment. It's designed to be a portfolio piece that solves genuine problems.
+Beyond solving a real problem, this project let us showcase everything we'd learned — data collection, market research, web development, and cloud deployment. We genuinely believe that technology should make life easier and more fair, especially in areas like housing where information gaps can cost people serious money.
 
 ## Contributing
 
-This is an open project welcoming contributions. Whether you want to improve the model, add new features, or extend coverage to more cities, we'd love your input. The codebase is structured for easy modification and extension.
+This is an open project welcoming contributions. Whether you want to improve the pricing engine, add new features, or extend coverage to more cities, we'd love your input.
 
-For collaborations: 
-    ```bash
-    git checkout -b feature-branch
-    git commit -m "Add new feature"
-    git push origin feature-branch
-    ```
+```bash
+git checkout -b feature-branch
+git commit -m "Add new feature"
+git push origin feature-branch
+```
 
 ## Disclaimer
 
-PriceLens provides estimates based on historical data and should not be the sole factor in property decisions. Always conduct additional research and consult local real estate professionals before making significant financial commitments. Market conditions change rapidly, and our predictions may not reflect current pricing.
+PriceLens provides estimates based on market data and should not be the sole factor in property decisions. Always conduct additional research and consult local real estate professionals before making significant financial commitments. Market conditions change rapidly, and our estimates may not reflect the latest pricing.
