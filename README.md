@@ -13,6 +13,16 @@ PriceLens is a web application that estimates house prices in Lagos and Abuja, N
 
 The Nigerian real estate market can be unpredictable, with prices varying wildly and scams being common. PriceLens provides transparent, data-driven price estimates that help both locals and diaspora citizens make informed decisions.
 
+## The Problem We're Solving
+
+The Nigerian property market has several challenges:
+- Inflated and inconsistent pricing across different areas
+- Limited transparency in how prices are set
+- Difficulty for diaspora citizens to assess fair market rates
+- Potential for scams due to information asymmetry
+
+PriceLens addresses these issues by providing objective, market-calibrated price estimates anyone can access for free.
+
 ## How It Works
 
 Visit the web app and enter basic property details:
@@ -29,41 +39,6 @@ Hit submit and get an instant estimate with:
 - **Sale**: Total asking price for outright purchase
 - A price range (±18%) reflecting typical market variation
 - Area tier classification and data provenance note
-
-## Screenshots
-
-### Homepage
-The landing page introduces PriceLens with a simple call to action.
-![Homepage Screenshot](./screenshots/p1.png)
-
-### Prediction Form
-Users can enter property details like location, bedrooms, bathrooms, and property type to get instant price estimates.
-![Prediction Form Screenshot](./screenshots/p2.png)
-
-### Prediction Results
-Users get to see their estimated price from PriceLens as a pop-up modal.
-![Estimated Price Display](./screenshots/p3.png)
-
-### About the Team
-Users get to see the people responsible for the project and what contribution they made. They can also send them emails, check their Twitter/X accounts, and their LinkedIn profiles.
-![Team Responsible](./screenshots/p4.png)
-
-## The Problem We're Solving
-
-The Nigerian property market has several challenges:
-- Inflated and inconsistent pricing across different areas
-- Limited transparency in how prices are set
-- Difficulty for diaspora citizens to assess fair market rates
-- Potential for scams due to information asymmetry
-
-PriceLens addresses these issues by providing objective, market-calibrated price estimates anyone can access for free.
-
-## Technical Details
-
-**Frontend**: HTML, CSS, and vanilla JavaScript — responsive, no framework dependencies  
-**Backend**: Python Flask API with Flask-CORS  
-**Pricing Engine**: 2026 market-calibrated rule-based system with 6 area tiers, separate rent/sale base-price tables, and property-type multipliers  
-**Deployment**: Frontend on Vercel, backend on Render
 
 ## Pricing Engine
 
@@ -83,6 +58,13 @@ PriceLens uses a market-calibrated pricing engine built from mid-2026 Nigerian r
 | 3-bed family home, Gwarinpa, Rent | ~₦5M/year | ~₦5M/year |
 | 3-bed family home, Kubwa, Rent | ~₦1.75M/year | ~₦1.75M/year |
 | 3-bed duplex, Lekki, Sale | ~₦460M | ₦250M–₦500M |
+
+## Technical Details
+
+**Frontend**: HTML, CSS, and vanilla JavaScript — responsive, no framework dependencies  
+**Backend**: Python Flask API with Flask-CORS  
+**Pricing Engine**: 2026 market-calibrated rule-based system with 6 area tiers, separate rent/sale base-price tables, and property-type multipliers  
+**Deployment**: Frontend on Vercel, backend on Render
 
 ## Current Limitations
 
@@ -124,15 +106,15 @@ PriceLens uses a market-calibrated pricing engine built from mid-2026 Nigerian r
 
 5. Fill in property details and view estimated prices.
 
-## Acknowledgments
-
-Thanks to FlexiSAF for the opportunity to work on this project during our Data Science and Generative AI internship. Special appreciation to my team members and collaborators who contributed their skills and support throughout development.
-
 ## Why We Built This
 
 PriceLens began as our final project during the Data Science and Generative AI internship training at FlexiSAF. We wanted to work on something that actually matters to people's lives, not just another theoretical exercise. The Nigerian housing market affects millions of people every day, and we saw an opportunity to use our newly learned skills to make a difference.
 
 Beyond solving a real problem, this project let us showcase everything we'd learned — data collection, market research, web development, and cloud deployment. We genuinely believe that technology should make life easier and more fair, especially in areas like housing where information gaps can cost people serious money.
+
+## Acknowledgments
+
+Thanks to FlexiSAF for the opportunity to work on this project during our Data Science and Generative AI internship. Special appreciation to my team members and collaborators who contributed their skills and support throughout development.
 
 ## Contributing
 
